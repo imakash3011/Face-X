@@ -134,7 +134,8 @@ def train(model, criterion, optimizer, scheduler, num_epochs=25):
                 running_corrects += torch.sum(preds == labels.data)
 
             metrics["loss"][phase] = running_loss / datasets_size[phase]
-            metrics["acc"][phase] = running_corrects.double() / datasets_size[phase]
+            metrics["acc"][phase] = running_corrects.double() / \
+                datasets_size[phase]
 
         print(
             "Loss: {:.4f} Acc: {:.4f} Val Loss: {:.4f} Val Acc: {:.4f}".format(

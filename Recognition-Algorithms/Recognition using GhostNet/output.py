@@ -35,7 +35,7 @@ def face_extractor(img):
     for (x, y, w, h) in faces:
         x = x - 10
         y = y - 10
-        cropped_face = img[y : y + h + 50, x : x + w + 50]
+        cropped_face = img[y: y + h + 50, x: x + w + 50]
     cv2.rectangle(img, (x, y), (x + w + 30, y + h + 40), (0, 255, 255), 2)
     return cropped_face
 
@@ -50,6 +50,8 @@ preprocess = transforms.Compose(
 )
 
 # create model to load pretrained weights into
+
+
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
@@ -105,7 +107,8 @@ while True:
         _, pred = preds.max(dim=1)
         if pred != 0:
             name = "Face found:{}".format(classes[pred])
-        cv2.putText(frame, name, (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2)
+        cv2.putText(frame, name, (50, 50),
+                    cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2)
     else:
         cv2.putText(
             frame,

@@ -8,6 +8,8 @@ face_classifier = cv2.CascadeClassifier(
 )
 
 # Load functions
+
+
 def face_extractor(img):
     # Function detects faces and returns the cropped face
     # If no face detected, it returns None
@@ -19,7 +21,7 @@ def face_extractor(img):
     for (x, y, w, h) in faces:
         x = x - 10
         y = y - 10
-        cropped_face = img[y : y + h + 50, x : x + w + 50]
+        cropped_face = img[y: y + h + 50, x: x + w + 50]
     return cropped_face
 
 
@@ -35,7 +37,8 @@ def write_show_img(name, count, img):
     # Function puts image in train or val directories
     # And displays image with image count
     if count <= 400:
-        file_name_path = "Datasets/train/{}/".format(name) + str(count) + ".jpg"
+        file_name_path = "Datasets/train/{}/".format(
+            name) + str(count) + ".jpg"
     else:
         file_name_path = "Datasets/val/{}/".format(name) + str(count) + ".jpg"
     cv2.imwrite(file_name_path, img)

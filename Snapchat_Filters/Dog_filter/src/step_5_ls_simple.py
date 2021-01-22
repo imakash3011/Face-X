@@ -7,6 +7,7 @@ def evaluate(A, Y, w):
     Yhat = np.argmax(A.dot(w), axis=1)
     return float(np.sum(Yhat == Y)) / Y.shape[0]
 
+
 def main():
     # load data
     with np.load('data/fer2013_train.npz') as data:

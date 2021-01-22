@@ -29,11 +29,11 @@ while True:
         nose_height = int(nose_width * 1)
 
         # New nose position
-        top_left = (int(center_nose[0] - nose_width/2),
-                    int(center_nose[1] - nose_height/2))
+        top_left = (int(center_nose[0] - nose_width / 2),
+                    int(center_nose[1] - nose_height / 2))
 
-        bottom_right = (int(center_nose[0] + nose_width/2),
-                        int(center_nose[1] + nose_height/2))
+        bottom_right = (int(center_nose[0] + nose_width / 2),
+                        int(center_nose[1] + nose_height / 2))
 
         # Addign the new nose
         nose_pig = cv2.resize(nose_image, (nose_width, nose_height))

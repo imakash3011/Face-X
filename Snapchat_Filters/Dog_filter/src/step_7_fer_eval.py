@@ -8,6 +8,7 @@ import torch
 import cv2
 import argparse
 
+
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
@@ -28,6 +29,7 @@ class Net(nn.Module):
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
         return x
+
 
 class Fer2013Dataset(Dataset):
     """Face Emotion Recognition dataset.
@@ -55,7 +57,8 @@ class Fer2013Dataset(Dataset):
     def __getitem__(self, idx):
         return {'image': self._samples[idx], 'label': self._labels[idx]}
 
-def evaluate(outputs: Variable, labels: Variable, normalized: bool=True
+
+def evaluate(outputs: Variable, labels: Variable, normalized: bool = True
              ) -> float:
     """Evaluate neural network outputs against non-one-hotted labels."""
     Y = labels.data.numpy()
@@ -64,7 +67,7 @@ def evaluate(outputs: Variable, labels: Variable, normalized: bool=True
     return float(np.sum(Yhat == Y) / denom)
 
 
-def batch_evaluate(net: Net, dataset: Dataset, batch_size: int=500) -> float:
+def batch_evaluate(net: Net, dataset: Dataset, batch_size: int = 500) -> float:
     """Evaluate neural network in batches, if dataset is too large."""
     score = 0.0
     n = dataset.X.shape[0]
@@ -73,6 +76,7 @@ def batch_evaluate(net: Net, dataset: Dataset, batch_size: int=500) -> float:
         y = dataset.Y[i: i + batch_size]
         score += evaluate(net(x), y, False)
     return score / n
+
 
 def get_image_to_emotion_predictor(model_path='assets/model_best.pth'):
     """Returns predictor, from image to emotion index."""
@@ -88,6 +92,7 @@ def get_image_to_emotion_predictor(model_path='assets/model_best.pth'):
         X = Variable(torch.from_numpy(frame)).float()
         return np.argmax(net(X).data.numpy(), axis=1)[0]
     return predictor
+
 
 def main():
     trainset = Fer2013Dataset('data/fer2013_train.npz')

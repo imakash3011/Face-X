@@ -1,6 +1,7 @@
 # Import OpenCV2 for image processing
 # Import os for file path
-import cv2, os
+import cv2
+import os
 
 # Import numpy for matrix calculation
 import numpy as np
@@ -12,16 +13,18 @@ from PIL import Image
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 
 # Using prebuilt frontal face training model, for face detection
-detector = cv2.CascadeClassifier("haarcascade_frontalface_default.xml");
+detector = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
 
 # Create method to get the images and label data
+
+
 def getImagesAndLabels(path):
 
     # Get all file path
-    imagePaths = [os.path.join(path,f) for f in os.listdir(path)]
+    imagePaths = [os.path.join(path, f) for f in os.listdir(path)]
 
     # Initialize empty face sample
-    faceSamples=[]
+    faceSamples = []
 
     # Initialize empty id
     ids = []
@@ -33,7 +36,7 @@ def getImagesAndLabels(path):
         PIL_img = Image.open(imagePath).convert('L')
 
         # PIL image to numpy array
-        img_numpy = np.array(PIL_img,'uint8')
+        img_numpy = np.array(PIL_img, 'uint8')
 
         # Get the image id
         id = int(os.path.split(imagePath)[-1].split(".")[1])
@@ -43,19 +46,20 @@ def getImagesAndLabels(path):
         faces = detector.detectMultiScale(img_numpy)
 
         # Loop for each face, append to their respective ID
-        for (x,y,w,h) in faces:
+        for (x, y, w, h) in faces:
 
             # Add the image to face samples
-            faceSamples.append(img_numpy[y:y+h,x:x+w])
+            faceSamples.append(img_numpy[y:y + h, x:x + w])
 
             # Add the ID to IDs
             ids.append(id)
 
     # Pass the face array and IDs array
-    return faceSamples,ids
+    return faceSamples, ids
+
 
 # Get the faces and IDs
-faces,ids = getImagesAndLabels('dataset')
+faces, ids = getImagesAndLabels('dataset')
 
 # Train the model using the faces and IDs
 recognizer.train(faces, np.array(ids))

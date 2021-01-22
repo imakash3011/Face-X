@@ -64,7 +64,7 @@ class Fer2013Dataset(Dataset):
         return {'image': self._samples[idx], 'label': self._labels[idx]}
 
 
-def evaluate(outputs: Variable, labels: Variable, normalized: bool=True
+def evaluate(outputs: Variable, labels: Variable, normalized: bool = True
              ) -> float:
     """Evaluate neural network outputs against non-one-hotted labels."""
     Y = labels.data.numpy()
@@ -73,7 +73,7 @@ def evaluate(outputs: Variable, labels: Variable, normalized: bool=True
     return float(np.sum(Yhat == Y) / denom)
 
 
-def batch_evaluate(net: Net, dataset: Dataset, batch_size: int=500) -> float:
+def batch_evaluate(net: Net, dataset: Dataset, batch_size: int = 500) -> float:
     """Evaluate neural network in batches, if dataset is too large."""
     score = 0.0
     n = dataset.X.shape[0]
@@ -97,7 +97,7 @@ def train(
         net: Net,
         trainset: Fer2013Dataset,
         testset: Fer2013Dataset,
-        pretrained_model: dict={}):
+        pretrained_model: dict = {}):
     """Main training loop and optimization setup."""
     trainloader = torch.utils.data.DataLoader(
         trainset, batch_size=32, shuffle=True)
