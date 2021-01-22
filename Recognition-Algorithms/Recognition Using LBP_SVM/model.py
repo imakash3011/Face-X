@@ -73,7 +73,8 @@ while True:
     ret, img = cap.read()
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5)
+    faces = face_cascade.detectMultiScale(
+        gray, scaleFactor=1.2, minNeighbors=5)
 
     for x, y, w, h in faces:
         cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
@@ -84,21 +85,11 @@ while True:
         hist = hist.T
         roi_color = img[y:y + h, x:x + w]
         output = clf.predict(hist)
-        cv2.putText(img, str(mapping[output[0]]), (x, y - 10), cv2.FONT_HERSHEY_COMPLEX, 2, (255, 0, 0), 2)
+        cv2.putText(img, str(mapping[output[0]]), (x, y - 10),
+                    cv2.FONT_HERSHEY_COMPLEX, 2, (255, 0, 0), 2)
     cv2.imshow('video', img)
     k = cv2.waitKey(30) & 0xff
     if k == 27:  # press 'ESC' to quit
         break
 cap.release()
 cv2.destroyAllWindows()
-
-
-
-
-
-
-
-
-
-
-

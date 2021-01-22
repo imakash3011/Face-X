@@ -10,6 +10,7 @@ import time
 def one_hot(y, num_classes=3):
     return np.eye(num_classes)[y]
 
+
 t0 = time.time()
 
 X_train, X_test = np.load('data/X_train.npy'), np.load('data/X_test.npy')
@@ -30,6 +31,7 @@ def evaluate(A, Y, w):
     Yhat = np.argmax(A.dot(w), axis=1)
     return float(np.sum(Yhat == Y)) / Y.shape[0]
 
+
 ds = [10, 50, 100, 250, 500, 750, 1000, 1250, 1500, 1750, 2000, 2304]
 
 for d in ds:
@@ -40,7 +42,8 @@ for d in ds:
     t2 = time.time()
     print('Finished stacking data:', t2 - t1)
 
-    ATA, ATy = np.ascontiguousarray(A_train.T.dot(A_train).astype(float)), A_train.T.dot(Y_oh_train)
+    ATA, ATy = np.ascontiguousarray(A_train.T.dot(
+        A_train).astype(float)), A_train.T.dot(Y_oh_train)
     I = np.eye(ATA.shape[0])
     reg = 1e10
     w = np.linalg.inv(ATA).dot(ATy)

@@ -41,7 +41,8 @@ class Fer2013Dataset(Dataset):
 
 
 trainset = Fer2013Dataset('data/fer2013_train.npz')
-trainloader = torch.utils.data.DataLoader(trainset, batch_size=32, shuffle=True)
+trainloader = torch.utils.data.DataLoader(
+    trainset, batch_size=32, shuffle=True)
 
 testset = Fer2013Dataset('data/fer2013_test.npz')
 testloader = torch.utils.data.DataLoader(testset, batch_size=32, shuffle=False)

@@ -26,7 +26,7 @@ _streaming = False
 
 def put_sprite(num):
     global SPRITES, BTNS
-    SPRITES[num] = 1 - SPRITES[num]  
+    SPRITES[num] = 1 - SPRITES[num]
     if SPRITES[num]:
         BTNS[num].config(relief=SUNKEN)
     else:
@@ -37,25 +37,30 @@ def draw_sprite(frame, sprite, x_offset, y_offset):
     (h, w) = (sprite.shape[0], sprite.shape[1])
     (imgH, imgW) = (frame.shape[0], frame.shape[1])
 
-    if y_offset + h >= imgH: 
-        sprite = sprite[0 : imgH - y_offset, :, :]
+    if y_offset + h >= imgH:
+        sprite = sprite[0: imgH - y_offset, :, :]
 
-    if x_offset + w >= imgW:  
-        sprite = sprite[:, 0 : imgW - x_offset, :]
+    if x_offset + w >= imgW:
+        sprite = sprite[:, 0: imgW - x_offset, :]
 
-    if x_offset < 0:  
-        sprite = sprite[:, abs(x_offset) : :, :]
+    if x_offset < 0:
+        sprite = sprite[:, abs(x_offset)::, :]
         w = sprite.shape[1]
         x_offset = 0
 
-    
     for c in range(3):
-       
-        frame[y_offset : y_offset + h, x_offset : x_offset + w, c] = sprite[:, :, c] * (
-            sprite[:, :, 3] / 255.0
-        ) + frame[y_offset : y_offset + h, x_offset : x_offset + w, c] * (
-            1.0 - sprite[:, :, 3] / 255.0
-        )
+
+        frame[y_offset: y_offset + h,
+              x_offset: x_offset + w,
+              c] = sprite[:,
+                          :,
+                          c] * (sprite[:,
+                                       :,
+                                       3] / 255.0) + frame[y_offset: y_offset + h,
+                                                           x_offset: x_offset + w,
+                                                           c] * (1.0 - sprite[:,
+                                                                              :,
+                                                                              3] / 255.0)
     return frame
 
 
@@ -64,28 +69,26 @@ def adjust_sprite2head(sprite, head_width, head_ypos, ontop=True):
     factor = 1.0 * head_width / w_sprite
     sprite = cv2.resize(
         sprite, (0, 0), fx=factor, fy=factor
-    )  
+    )
     (h_sprite, w_sprite) = (sprite.shape[0], sprite.shape[1])
 
     y_orig = (
         head_ypos - h_sprite if ontop else head_ypos
-    ) 
+    )
     if(
         y_orig < 0
-    ):  
-        sprite = sprite[abs(y_orig) : :, :, :]  
-        y_orig = 0 
+    ):
+        sprite = sprite[abs(y_orig)::, :, :]
+        y_orig = 0
     return (sprite, y_orig)
-
 
 
 def apply_sprite(image, path2sprite, w, x, y, angle, ontop=True):
     sprite = cv2.imread(path2sprite, -1)
-    
+
     sprite = rotate_bound(sprite, angle)
     (sprite, y_final) = adjust_sprite2head(sprite, w, y, ontop)
     image = draw_sprite(image, sprite, x, y_final)
-
 
 
 def calculate_inclination(point1, point2):
@@ -138,10 +141,10 @@ def cvloop(run_event, read_camera=0, virtual_camera=0):
     model = "shape_predictor_68_face_landmarks.dat"
     predictor = dlib.shape_predictor(
         model
-    )  
+    )
     stream_camera = None
     img_counter = 0
-    while run_event.is_set(): 
+    while run_event.is_set():
         ret, image = video_capture.read()
 
         if not ret:
@@ -157,7 +160,7 @@ def cvloop(run_event, read_camera=0, virtual_camera=0):
                     )
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         faces = detector(gray, 0)
-        
+
         for face in faces:  # if there are faces
             (x, y, w, h) = (face.left(), face.top(), face.width(), face.height())
             # *** Facial Landmarks detection
@@ -191,7 +194,8 @@ def cvloop(run_event, read_camera=0, virtual_camera=0):
             # flies condition
             if SPRITES[2]:
                 # to make the "animation" we read each time a different image of that folder
-                # the images are placed in the correct order to give the animation impresion
+                # the images are placed in the correct order to give the
+                # animation impresion
                 apply_sprite(image, dir_ + flies[i], w, x, y, incl)
                 i += 1
                 i = (
@@ -199,12 +203,12 @@ def cvloop(run_event, read_camera=0, virtual_camera=0):
                 )  # when done with all images of that folder, begin again
 
             # doggy condition
-            (x0, y0, w0, h0) = get_face_boundbox(shape, 6)  # bound box of mouth
+            (x0, y0, w0, h0) = get_face_boundbox(
+                shape, 6)  # bound box of mouth
             if SPRITES[4]:
                 (x3, y3, w3, h3) = get_face_boundbox(shape, 5)  # nose
-                apply_sprite(
-                    image, "./sprites/doggy_nose.png", w3, x3, y3, incl, ontop=False
-                )
+                apply_sprite(image, "./sprites/doggy_nose.png",
+                             w3, x3, y3, incl, ontop=False)
 
                 apply_sprite(image, "./sprites/doggy_ears.png", w, x, y, incl)
 
@@ -222,10 +226,11 @@ def cvloop(run_event, read_camera=0, virtual_camera=0):
                 img_name = "image{}.png".format(img_counter)
                 cv2.imwrite(img_name, image)
                 # print("Success")
-                
+
                 break
             img_counter += 1
-        # OpenCV represents image as BGR; PIL but RGB, we need to change the chanel order
+        # OpenCV represents image as BGR; PIL but RGB, we need to change the
+        # chanel order
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
         if _streaming:
@@ -245,7 +250,11 @@ def cvloop(run_event, read_camera=0, virtual_camera=0):
 
 # Parser
 parser = argparse.ArgumentParser()
-parser.add_argument("--read_camera", type=int, default=0, help="Id to read camera from")
+parser.add_argument(
+    "--read_camera",
+    type=int,
+    default=0,
+    help="Id to read camera from")
 parser.add_argument(
     "--virtual_camera",
     type=int,
@@ -262,7 +271,7 @@ this_dir = os.path.dirname(os.path.realpath(__file__))
 imgicon = PhotoImage(file=os.path.join(this_dir, "imgs", "icon.gif"))
 root.tk.call("wm", "iconphoto", root._w, imgicon)
 
-##Create 5 buttons and assign their corresponding function to active sprites
+# Create 5 buttons and assign their corresponding function to active sprites
 btn1 = Button(root, text="Hat", command=lambda: put_sprite(0))
 btn1.pack(side="top", fill="both", expand="no", padx="5", pady="5")
 
@@ -295,13 +304,18 @@ SPRITES = [
     0,
     0,
 ]  # hat, mustache, flies, glasses, doggy -> 1 is visible, 0 is not visible
-BTNS = [btn1, btn2, btn3, btn4, btn5,btn6]
+BTNS = [btn1, btn2, btn3, btn4, btn5, btn6]
 
 
 # Creates a thread where the magic ocurs
 run_event = threading.Event()
 run_event.set()
-action = Thread(target=cvloop, args=(run_event, args.read_camera, args.virtual_camera))
+action = Thread(
+    target=cvloop,
+    args=(
+        run_event,
+        args.read_camera,
+        args.virtual_camera))
 action.setDaemon(True)
 action.start()
 
@@ -312,7 +326,8 @@ def terminate():
     print("Closing ...")
     run_event.clear()
     time.sleep(1)
-    # action.join() #strangely in Linux this thread does not terminate properly, so .join never finishes
+    # action.join() #strangely in Linux this thread does not terminate
+    # properly, so .join never finishes
     root.destroy()
     print("Hope You Enjoyed")
 

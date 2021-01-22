@@ -1,6 +1,6 @@
+import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use('Agg')
-import matplotlib.pyplot as plt
 
 
 ds = [10, 50, 100, 250, 500, 750, 1000, 1250, 1500, 1750, 2000, 2304]

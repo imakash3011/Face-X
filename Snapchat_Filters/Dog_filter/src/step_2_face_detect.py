@@ -24,5 +24,6 @@ def main():
 
     cv2.imwrite('outputs/children_detected.png', frame)
 
+
 if __name__ == '__main__':
     main()

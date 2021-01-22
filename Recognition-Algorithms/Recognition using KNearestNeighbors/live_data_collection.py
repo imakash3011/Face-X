@@ -1,4 +1,4 @@
-#Live Data Collection
+# Live Data Collection
 import cv2
 import numpy as np
 import os
@@ -9,26 +9,25 @@ detector = cv2.CascadeClassifier("./haarcascade_frontalface_default.xml")
 
 name = input("Enter your name : ")
 
-frames = []      #should be greter than 5
-outputs = []     #should be greter than 5
+frames = []  # should be greter than 5
+outputs = []  # should be greter than 5
 
 while True:
 
     ret, frame = cap.read()
 
     if ret:
-        faces = detector.detectMultiScale(frame,1.1,4)
+        faces = detector.detectMultiScale(frame, 1.1, 4)
 
         for face in faces:
             x, y, w, h = face
 
-            cut = frame[y:y+h, x:x+w]
+            cut = frame[y:y + h, x:x + w]
 
             fix = cv2.resize(cut, (100, 100))
             gray = cv2.cvtColor(fix, cv2.COLOR_BGR2GRAY)
             cv2.imshow("My Face", gray)
         cv2.imshow("My Screen", frame)
-        
 
     key = cv2.waitKey(1)
 

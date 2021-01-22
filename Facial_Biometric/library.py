@@ -15,16 +15,17 @@ while True:
     faces = detector(gray)
 
     for face in faces:
-        x1=face.left()
-        y1=face.top()
-        x2=face.right()
-        y2=face.bottom()
-        cv2.rectangle(frame, (x1,y1), (x2,y2),(0,255,0),3)
+        x1 = face.left()
+        y1 = face.top()
+        x2 = face.right()
+        y2 = face.bottom()
+        cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 3)
         landmarks = predictor(gray, face)
         # print(landmarks.parts())
         nose = landmarks.parts()[27]
         # print(nose.x, nose.y)
-        cv2.putText(frame,str(name),(x1, y1 - 10), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 2)
+        cv2.putText(frame, str(name), (x1, y1 - 10),
+                    cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 2)
         for point in landmarks.parts():
             cv2.circle(frame, (point.x, point.y), 2, (0, 0, 255), 3)
 

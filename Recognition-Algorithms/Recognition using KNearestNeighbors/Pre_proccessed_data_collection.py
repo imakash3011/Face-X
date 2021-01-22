@@ -1,8 +1,9 @@
-#Pre-Proccessed Images Data Collection
+# Pre-Proccessed Images Data Collection
 import cv2
 import numpy as np
 import os
-photo = cv2.imread("path of image") #photo should be of 640x480 pixels and axis must match.
+# photo should be of 640x480 pixels and axis must match.
+photo = cv2.imread("path of image")
 name = input("Enter your name : ")
 
 frames = []

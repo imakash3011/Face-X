@@ -1,7 +1,7 @@
 # Import OpenCV2 for image processing
 import cv2
 
-# Start capturing video 
+# Start capturing video
 vid_cam = cv2.VideoCapture(0)
 
 # Detect object in video stream using Haarcascade Frontal Face
@@ -26,16 +26,17 @@ while(True):
     faces = face_detector.detectMultiScale(gray, 1.3, 5)
 
     # Loops for each faces
-    for (x,y,w,h) in faces:
+    for (x, y, w, h) in faces:
 
         # Crop the image frame into rectangle
-        cv2.rectangle(image_frame, (x,y), (x+w,y+h), (255,0,0), 2)
-        
+        cv2.rectangle(image_frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
+
         # Increment sample face image
         count += 1
 
         # Save the captured image into the datasets folder
-        cv2.imwrite("dataset/User." + str(face_id) + '.' + str(count) + ".jpg", gray[y:y+h,x:x+w])
+        cv2.imwrite("dataset/User." + str(face_id) + '.' +
+                    str(count) + ".jpg", gray[y:y + h, x:x + w])
 
         # Display the video frame, with bounded rectangle on the person's face
         cv2.imshow('frame', image_frame)
@@ -45,7 +46,7 @@ while(True):
         break
 
     # If image taken reach 100, stop taking video
-    elif count>100:
+    elif count > 100:
         break
 
 # Stop video

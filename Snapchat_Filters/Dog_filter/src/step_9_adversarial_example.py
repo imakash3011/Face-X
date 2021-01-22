@@ -21,7 +21,9 @@ class Net(nn.Module):
         self.fc1 = nn.Linear(16 * 4 * 4, 120)
         self.fc2 = nn.Linear(120, 48)
         self.fc3 = nn.Linear(48, 3)
-        self.r = nn.Parameter(data=torch.zeros(1, 1, 48, 48), requires_grad=True)
+        self.r = nn.Parameter(
+            data=torch.zeros(
+                1, 1, 48, 48), requires_grad=True)
 
     def forward(self, x):
         x = x + self.r
@@ -33,6 +35,7 @@ class Net(nn.Module):
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
         return x
+
 
 net = Net().float()
 for param in net.parameters():

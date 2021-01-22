@@ -1,3 +1,5 @@
+from keras.models import load_model
+import tensorflow as tf
 from keras.layers import Input, Lambda, Dense, Flatten
 from keras.models import Model
 from keras.applications.vgg16 import VGG16
@@ -16,15 +18,17 @@ train_path = '/home/akshita/Desktop/Face_reco/user/Train'
 valid_path = '/home/akshita/Desktop/Face_reco/user/Test'
 
 # add preprocessing layer to the front of VGG
-vgg = VGG16(input_shape=IMAGE_SIZE + [3], weights='imagenet', include_top=False)
+vgg = VGG16(
+    input_shape=IMAGE_SIZE + [3],
+    weights='imagenet',
+    include_top=False)
 
 for layer in vgg.layers:
-  layer.trainable = False
-  
+    layer.trainable = False
 
-  
+
 folders = glob('/home/akshita/Desktop/Face_reco/user/Train/*')
-  
+
 
 # No of layers
 x = Flatten()(vgg.output)
@@ -38,38 +42,42 @@ model.summary()
 
 # Compile the model
 model.compile(
-  loss='categorical_crossentropy',
-  optimizer='adam',
-  metrics=['accuracy']
+    loss='categorical_crossentropy',
+    optimizer='adam',
+    metrics=['accuracy']
 )
 
 
-from keras.preprocessing.image import ImageDataGenerator
+train_datagen = ImageDataGenerator(rescale=1. / 255,
+                                   shear_range=0.2,
+                                   zoom_range=0.2,
+                                   horizontal_flip=True)
 
-train_datagen = ImageDataGenerator(rescale = 1./255,
-                                   shear_range = 0.2,
-                                   zoom_range = 0.2,
-                                   horizontal_flip = True)
+test_datagen = ImageDataGenerator(rescale=1. / 255)
 
-test_datagen = ImageDataGenerator(rescale = 1./255)
+training_set = train_datagen.flow_from_directory(
+    '/home/akshita/Desktop/Face_reco/user/Train',
+    target_size=(
+        224,
+        224),
+    batch_size=32,
+    class_mode='categorical')
 
-training_set = train_datagen.flow_from_directory('/home/akshita/Desktop/Face_reco/user/Train',
-                                                 target_size = (224, 224),
-                                                 batch_size = 32,
-                                                 class_mode = 'categorical')
-
-test_set = test_datagen.flow_from_directory('/home/akshita/Desktop/Face_reco/user/Test',
-                                            target_size = (224, 224),
-                                            batch_size = 32,
-                                            class_mode = 'categorical')
+test_set = test_datagen.flow_from_directory(
+    '/home/akshita/Desktop/Face_reco/user/Test',
+    target_size=(
+        224,
+        224),
+    batch_size=32,
+    class_mode='categorical')
 
 # fit the model
 r = model.fit_generator(
-  training_set,
-  validation_data=test_set,
-  epochs=5,
-  steps_per_epoch=len(training_set),
-  validation_steps=len(test_set)
+    training_set,
+    validation_data=test_set,
+    epochs=5,
+    steps_per_epoch=len(training_set),
+    validation_steps=len(test_set)
 )
 
 # loss
@@ -86,9 +94,6 @@ plt.legend()
 plt.show()
 plt.savefig('AccVal_acc')
 
-import tensorflow as tf
 
-from keras.models import load_model
-
-##Saving the model 
+# Saving the model
 model.save('final_model.h5')
